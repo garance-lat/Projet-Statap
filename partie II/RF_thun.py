@@ -45,25 +45,27 @@ X_test = sc.transform(X_test)
 param_grid = {
     'n_estimators': [50, 100, 150], # nb d'arbres (+ élevé, + performant, + temps de calcul
     'max_depth': [None, 10, 20], # profondeur max de chaque arbre (+ profond + détails dans les données + risque d'overfitting)
-    'min_samples_split': [2, 5, 10],
-    'min_samples_leaf': [1, 2, 4],
-    'max_features': ['auto', 'sqrt']
+    'min_samples_split': [2, 5, 10], # minimum d'échantillons pour diviser un nœud interne (prévenir le surajustement)
+    'min_samples_leaf': [1, 2, 4], #minimum d'échantillons requis pour être à un nœud feuille (terminal)
 }
 
-min_samples_split : 
-
-min_samples_leaf : Le nombre minimum d'échantillons requis pour être à un nœud feuille (terminal). Comme avec min_samples_split, une valeur plus élevée peut aider à régulariser le modèle.
-
-max_features : Le nombre maximum de fonctionnalités à considérer pour chaque division d'un nœud. Les options typiques incluent 'auto' (équivalent à sqrt(n_features)) et 'sqrt' (également connu sous le nom de 'auto'), qui recherchent les meilleures fonctionnalités parmi toutes les fonctionnalités disponibles.
-
-En utilisant une recherche par grille (Grid Search), vous pouvez spécifier différentes combinaisons de ces hyperparamètres, et le Grid Search essaiera toutes les combinaisons possibles pour trouver celle qui maximise les performances du modèle, généralement mesurées par une métrique comme la précision, le F-score, etc.
+#En utilisant une recherche par grille (Grid Search), vous pouvez spécifier différentes combinaisons de ces hyperparamètres, et le Grid Search essaiera toutes les combinaisons possibles pour trouver celle qui maximise les performances du modèle, généralement mesurées par une métrique comme la précision, le F-score, etc.
 
 # Créer un classifieur Random Forest
-rf_classifier = RandomForestClassifier(random_state=42)
+rf_classifier = RandomForestClassifier(random_state=42) #preparation
 
 # Recherche par grille pour trouver les meilleurs hyperparamètres
 grid_search = GridSearchCV(estimator=rf_classifier, param_grid=param_grid, cv=3, n_jobs=-1, scoring='accuracy')
 grid_search.fit(X_train, y_train)
+
+#GridSearchCV : classe de la bibliothèque scikit-learn qui implémente une recherche par grille (Grid Search)
+#- Essayer toutes les combinaisons possibles d'hyperparamètres spécifiées dans une grille
+#- Evaluer chaque combinaison à l'aide de la validation croisée pour trouver la meilleure combinaison d'hyperparamètres.
+#estimator=rf_classifier : modèle à optimiser à l'aide de la recherche par grille (classifieur de forêt aléatoire rf_classifier)
+#param_grid=param_grid : dictionnaire - clés=hyperparamètres et valeurs
+#cv=3 : nombre de plis pour la validation croisée
+#n_jobs=-1 : entraînement des modèles sera parallélisé sur tous les processeurs disponibles.
+#scoring='accuracy' : mesure de performance utilisée pour évaluer chaque combinaison d'hyperparamètres (précision (accuracy) = métrique de performance)
 
 # Afficher les meilleurs hyperparamètres
 print("Meilleurs hyperparamètres:", grid_search.best_params_)
