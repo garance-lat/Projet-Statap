@@ -24,6 +24,12 @@ df['grav'] = df['grav'].replace({1: 0, 2: 0, 3: 1, 4: 1})
 
 # Suppression des colonnes non nécessaires
 df = df.drop(columns=['Num_Acc', 'an', 'adr', 'lat', 'long', 'lartpc', 'larrout', 'com', 'gps', 'voie', 'dep', 'v2', 'pr', 'pr1'])
+#larrout : largeur de la chaussée 
+#com ?
+#voie ?
+#dep 
+#pr 
+
 # **comment a été choisi ces var ?
 df['hrmn'] = df['hrmn'].str.split(':').str[0]
 
